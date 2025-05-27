@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import SignInForm from "./components/sign-in-form";
@@ -8,7 +6,7 @@ import SignUpForm from "./components/sign-up-form";
 export default function AuthenticationPage() {
   return (
     <div className="flex h-screen w-screen items-center space-x-1">
-      <div className="h-full w-1/2 bg-amber-300">
+      {/* <div className="h-full w-1/2 bg-amber-300">
         <Image
           src="/doutor.jpg"
           alt="Picture of the author"
@@ -16,7 +14,7 @@ export default function AuthenticationPage() {
           height={800}
           className="size-full object-cover"
         />
-      </div>
+      </div> */}
       <div className="flex h-full w-1/2 items-center justify-center">
         <div className="space-y-8">
           <h1 className="text-primary text-center text-[45px] font-bold">
