@@ -14,12 +14,12 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "http://192.168.0.250:3000", // <- a origem mencionada no aviso
   ],
-  // socialProviders: {
-  //   google: {
-  //     clientId: process.env.GOOGLE_CLIENT_ID as string,
-  //     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-  //   },
-  // },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
   user: {
     modelName: "usersTable",
   },
