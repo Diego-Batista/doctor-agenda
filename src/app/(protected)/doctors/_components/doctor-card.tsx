@@ -37,6 +37,7 @@ import { doctorsTable } from "@/db/schema";
 import { formatCurrencyInCents } from "@/helpers/currency";
 
 import { getAvailability } from "../_helpers/availability";
+import { Icons } from "./Icons";
 import UpsertDoctorForm from "./upsert-doctor-form";
 
 interface DoctorCardProps {
@@ -73,8 +74,13 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
             <AvatarFallback>{doctorInitials}</AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="text-sm font-medium">{doctor.name}</h3>
-            <p className="text-muted-foreground text-sm">{doctor.specialty}</p>
+            <h3 className="text-sm font-medium">Dr. {doctor.name}</h3>
+            <div className="mt-1.5 flex items-center gap-1">
+              <Icons name={doctor.specialty} size={13} color="#4f46e5" />
+              <p className="text-muted-foreground text-sm">
+                {doctor.specialty}
+              </p>
+            </div>
           </div>
         </div>
       </CardHeader>
