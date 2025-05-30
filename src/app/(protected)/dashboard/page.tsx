@@ -1,4 +1,5 @@
-import { and, count, eq, gte, lte, sum } from "drizzle-orm";
+import dayjs from "dayjs";
+import { and, count, eq, gte, lte, sql, sum } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -16,6 +17,7 @@ import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import { DatePicker } from "./components/date-picker";
+import { RevenueCharts } from "./components/revenue-charts";
 import StatsCards from "./components/stats-cards";
 
 interface DashboardPageProps {
@@ -90,6 +92,29 @@ const PatientsPage = async ({ searchParams }: DashboardPageProps) => {
         .where(eq(doctorsTable.clinicId, session.user.clinic.id)),
     ]);
 
+  const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
+  const chartEndDate = dayjs().add(10, "days").endOf("day").toDate();
+
+  const dailyAppointments = await db
+    .select({
+      date: sql<string>`DATE(${appointmentsTable.date})`.as("date"),
+      appointments: count(appointmentsTable.id),
+      revenue:
+        sql<number>`COALESCE(SUM(${appointmentsTable.appointmentPriceInCents}), 0)`.as(
+          "revenue",
+        ),
+    })
+    .from(appointmentsTable)
+    .where(
+      and(
+        eq(appointmentsTable.clinicId, session.user.clinic.id),
+        gte(appointmentsTable.date, chartStartDate),
+        lte(appointmentsTable.date, chartEndDate),
+      ),
+    )
+    .groupBy(sql<string>`DATE(${appointmentsTable.date})`)
+    .orderBy(sql<string>`DATE(${appointmentsTable.date})`);
+
   return (
     <PageContainer>
       <PageHeader>
@@ -112,6 +137,14 @@ const PatientsPage = async ({ searchParams }: DashboardPageProps) => {
           totalPatients={totalPatients[0].total ?? 0}
           totalDoctors={totalDoctors[0].total ?? 0}
         />
+        <div className="grid grid-cols-[2.25fr_1fr]">
+          <RevenueCharts
+            dailyAppointments={dailyAppointments.map((appointment) => ({
+              ...appointment,
+              date: new Date(appointment.date),
+            }))}
+          />
+        </div>
       </PageContent>
     </PageContainer>
   );
