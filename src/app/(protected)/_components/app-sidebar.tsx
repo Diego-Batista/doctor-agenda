@@ -2,10 +2,11 @@
 
 import {
   CalendarDays,
+  Gem,
   LayoutDashboard,
   LogOut,
   Stethoscope,
-  UserRound,
+  UsersRound,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,9 +32,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import { cn } from "@/lib/utils";
 
-// Menu items.
 const items = [
   {
     title: "Dashboard",
@@ -46,14 +45,14 @@ const items = [
     icon: CalendarDays,
   },
   {
-    title: "Medicos",
+    title: "Médicos",
     url: "/doctors",
     icon: Stethoscope,
   },
   {
     title: "Pacientes",
     url: "/patients",
-    icon: UserRound,
+    icon: UsersRound,
   },
 ];
 
@@ -74,7 +73,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
-        <Image src="/Logo.svg" alt="Doctor Agenda" width={136} height={28} />
+        <Image src="/logo.svg" alt="Doutor Agenda" width={136} height={28} />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -85,14 +84,8 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <Link href={item.url}>
-                      <item.icon
-                        className={cn(pathname === item.url && "text-primary")}
-                      />
-                      <span
-                        className={cn(pathname === item.url && "text-primary")}
-                      >
-                        {item.title}
-                      </span>
+                      <item.icon />
+                      <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -100,17 +93,33 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Outros</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/subscription"}
+                >
+                  <Link href="/subscription">
+                    <Gem />
+                    <span>Assinatura</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t p-4">
+      <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <Avatar>
-                    <AvatarFallback>
-                      {session.data?.user.name[0]}
-                    </AvatarFallback>
+                    <AvatarFallback>F</AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-sm">
@@ -123,7 +132,7 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => handleSignOut()}>
+                <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut />
                   Sair
                 </DropdownMenuItem>
