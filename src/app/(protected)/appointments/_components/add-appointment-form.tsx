@@ -286,11 +286,14 @@ const AddAppointmentForm = ({
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
-                      disabled={(date) =>
-                        date < new Date() || !isDateAvailable(date)
-                      }
+                      disabled={(date) => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // zera hora, minuto, segundo, milissegundo
+                        const compareDate = new Date(date);
+                        compareDate.setHours(0, 0, 0, 0);
+                        return compareDate < today || !isDateAvailable(date);
+                      }}
                       initialFocus
-                      locale={ptBR}
                     />
                   </PopoverContent>
                 </Popover>
@@ -322,7 +325,7 @@ const AddAppointmentForm = ({
                         value={time.value}
                         disabled={!time.available}
                       >
-                        {time.label} {!time.available && "(Indisponível)"}
+                        {time.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

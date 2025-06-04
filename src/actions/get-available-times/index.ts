@@ -80,10 +80,17 @@ export const getAvailableTimes = actionClient
         date.format("HH:mm:ss") <= doctorAvailableTo.format("HH:mm:ss")
       );
     });
+
+    const isToday = dayjs(parsedInput.date).isSame(dayjs(), "day");
+
     return doctorTimeSlots.map((time) => {
+      const timeDate = dayjs(`${parsedInput.date}T${time}`);
+      const isAtLeast30MinLater = timeDate.isAfter(dayjs().add(30, "minute"));
+      const isInFuture = !isToday || isAtLeast30MinLater;
+
       return {
         value: time,
-        available: !appointmentsOnSelectedDate.includes(time),
+        available: isInFuture && !appointmentsOnSelectedDate.includes(time),
         label: time.substring(0, 5),
       };
     });
