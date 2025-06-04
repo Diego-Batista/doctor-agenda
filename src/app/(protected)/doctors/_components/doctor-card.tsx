@@ -67,16 +67,16 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
   const availability = getAvailability(doctor);
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="px-6 pt-5">
+      <CardHeader className="px-0">
         <div className="flex items-center gap-2">
-          <Avatar className="h-10 w-10">
+          <Avatar className="mr-3 h-16 w-16">
             <AvatarFallback>{doctorInitials}</AvatarFallback>
           </Avatar>
-          <div>
+          <div className="flex w-full flex-col">
             <h3 className="text-sm font-medium">Dr. {doctor.name}</h3>
-            <div className="mt-1.5 flex items-center gap-1">
-              <Icons name={doctor.specialty} size={13} color="#4f46e5" />
+            <div className="mt-2 flex w-full items-center gap-1.5">
+              <Icons name={doctor.specialty} size={17} color="#4f46e5" />
               <p className="text-muted-foreground text-sm">
                 {doctor.specialty}
               </p>
@@ -85,17 +85,17 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
         </div>
       </CardHeader>
       <Separator />
-      <CardContent className="flex flex-col gap-2">
-        <Badge variant="outline">
+      <CardContent className="my-5 flex flex-col gap-3">
+        <Badge variant="primary">
           <CalendarIcon className="mr-1" />
           {availability.from.format("dddd")} a {availability.to.format("dddd")}
         </Badge>
-        <Badge variant="outline">
+        <Badge variant="primary">
           <ClockIcon className="mr-1" />
           {availability.from.format("HH:mm")} as{" "}
           {availability.to.format("HH:mm")}
         </Badge>
-        <Badge variant="outline">
+        <Badge variant="primary">
           <DollarSignIcon className="mr-1" />
           {formatCurrencyInCents(doctor.appointmentPriceInCents)}
         </Badge>
@@ -107,7 +107,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
           onOpenChange={setIsUpsertDoctorDialogOpen}
         >
           <DialogTrigger asChild>
-            <Button className="w-full">Ver detalhes</Button>
+            <Button className="w-full cursor-pointer">Ver detalhes</Button>
           </DialogTrigger>
           <UpsertDoctorForm
             doctor={{

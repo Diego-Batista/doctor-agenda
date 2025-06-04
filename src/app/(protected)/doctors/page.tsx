@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import {
   PageActions,
   PageContainer,
-  PageContent,
   PageDescription,
   PageHeader,
   PageHeaderContent,
@@ -48,13 +47,17 @@ const DoctorsPage = async () => {
           <AddDoctorButton />
         </PageActions>
       </PageHeader>
-      <PageContent>
-        <div className="grid grid-cols-3 gap-6">
+      {doctors.length === 0 ? (
+        <div className="flex min-h-[400px] flex-1 items-center justify-center">
+          <PageDescription>Ainda não há médicos cadastrados.</PageDescription>
+        </div>
+      ) : (
+        <div className="grid grid-cols-4 gap-6">
           {doctors.map((doctor) => (
             <DoctorCard key={doctor.id} doctor={doctor} />
           ))}
         </div>
-      </PageContent>
+      )}
     </PageContainer>
   );
 };

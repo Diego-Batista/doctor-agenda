@@ -29,6 +29,7 @@ import {
   FaWheelchair,
   FaXRay,
 } from "react-icons/fa";
+import { PiHeartbeat } from "react-icons/pi";
 
 import { Specialty } from "./specialties";
 
@@ -44,7 +45,7 @@ const icons: Record<Specialty, FC<{ size?: number; color?: string }>> = {
   Angiologia: FaHeart,
   Cancerologia: FaClinicMedical,
   Cardiologia: FaHeart,
-  "Cirurgia Cardiovascular": FaHeart,
+  "Cirurgia Cardiovascular": PiHeartbeat,
   "Cirurgia de Cabeça e Pescoço": FaUserMd,
   "Cirurgia do Aparelho Digestivo": FaClipboardList,
   "Cirurgia Geral": FaUserMd,
@@ -97,7 +98,7 @@ export const Icons: FC<Props> = ({
 }) => {
   const Icon = icons[name as keyof typeof icons];
   return (
-    <div className="flex size-6 items-center justify-center rounded-full bg-[#E9F2FF]">
+    <div className="flex items-center justify-center rounded-full bg-[#E9F2FF] p-2">
       <Icon size={size} color={color} />
     </div>
   );

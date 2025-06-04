@@ -32,6 +32,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 const items = [
   {
@@ -82,10 +83,23 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                  <SidebarMenuButton
+                    asChild
+                    className={cn(
+                      pathname === item.url && "bg-sidebar-primary-foreground",
+                    )}
+                  >
                     <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <item.icon
+                        className={cn(pathname === item.url && "text-primary")}
+                      />
+                      <span
+                        className={cn(
+                          pathname === item.url && "text-primary font-medium",
+                        )}
+                      >
+                        {item.title}
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
