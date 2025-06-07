@@ -4,6 +4,8 @@ import { ptBR } from "date-fns/locale";
 
 import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 
+import { AppointmentStatusCell } from "./appointment-status-cell";
+import { StatusType } from "./status-badge";
 import AppointmentsTableActions from "./table-actions";
 
 export type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
@@ -60,6 +62,20 @@ export function getAppointmentsTableColumns({
           style: "currency",
           currency: "BRL",
         }).format(price);
+      },
+    },
+    {
+      id: "status",
+      accessorKey: "status",
+      header: "Status",
+      cell: (params) => {
+        const appointment = params.row.original;
+        return (
+          <AppointmentStatusCell
+            appointmentId={appointment.id}
+            status={appointment.status as StatusType}
+          />
+        );
       },
     },
     {
