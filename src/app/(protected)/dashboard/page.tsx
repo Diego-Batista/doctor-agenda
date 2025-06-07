@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DataTable } from "@/components/ui/data-table";
 import {
   PageActions,
   PageContainer,
@@ -17,8 +16,8 @@ import {
 import { getDashboard } from "@/data/get-dashboard";
 import { auth } from "@/lib/auth";
 
-import { appointmentsTableColumns } from "../appointments/_components/table-columns";
 import AppointmentsChart from "./_components/appointments-chart";
+import AppointmentsTodayTable from "./_components/AppointmentsTodayTable";
 import { DatePicker } from "./_components/date-picker";
 import StatsCards from "./_components/stats-cards";
 import TopDoctors from "./_components/top-doctors";
@@ -59,6 +58,8 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
     topSpecialties,
     todayAppointments,
     dailyAppointmentsData,
+    patients,
+    doctors,
   } = await getDashboard({
     from,
     to,
@@ -106,9 +107,10 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
               </div>
             </CardHeader>
             <CardContent>
-              <DataTable
-                columns={appointmentsTableColumns}
-                data={todayAppointments}
+              <AppointmentsTodayTable
+                appointments={todayAppointments}
+                doctors={doctors}
+                patients={patients}
               />
             </CardContent>
           </Card>

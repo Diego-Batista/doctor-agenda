@@ -2,7 +2,6 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { DataTable } from "@/components/ui/data-table";
 import {
   PageActions,
   PageContainer,
@@ -17,7 +16,7 @@ import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddAppointmentButton from "./_components/add-appointment-button";
-import { appointmentsTableColumns } from "./_components/table-columns";
+import AppointmentsTable from "./_components/appointments-table";
 
 const AppointmentsPage = async () => {
   const session = await auth.api.getSession({
@@ -29,9 +28,9 @@ const AppointmentsPage = async () => {
   if (!session.user.clinic) {
     redirect("/clinic-form");
   }
-  // if (!session.user.plan) {
-  //   redirect("/new-subscription");
-  // }
+  if (!session.user.plan) {
+    redirect("/new-subscription");
+  }
   const [patients, doctors, appointments] = await Promise.all([
     db.query.patientsTable.findMany({
       where: eq(patientsTable.clinicId, session.user.clinic.id),
@@ -62,7 +61,11 @@ const AppointmentsPage = async () => {
         </PageActions>
       </PageHeader>
       <PageContent>
-        <DataTable data={appointments} columns={appointmentsTableColumns} />
+        <AppointmentsTable
+          appointments={appointments}
+          doctors={doctors}
+          patients={patients}
+        />
       </PageContent>
     </PageContainer>
   );

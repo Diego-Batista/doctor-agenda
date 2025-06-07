@@ -28,6 +28,8 @@ export const getDashboard = async ({ from, to, session }: Params) => {
     topSpecialties,
     todayAppointments,
     dailyAppointmentsData,
+    doctors,
+    patients,
   ] = await Promise.all([
     db
       .select({
@@ -132,6 +134,12 @@ export const getDashboard = async ({ from, to, session }: Params) => {
       )
       .groupBy(sql`DATE(${appointmentsTable.date})`)
       .orderBy(sql`DATE(${appointmentsTable.date})`),
+    db.query.doctorsTable.findMany({
+      where: eq(doctorsTable.clinicId, session.user.clinic.id),
+    }),
+    db.query.patientsTable.findMany({
+      where: eq(patientsTable.clinicId, session.user.clinic.id),
+    }),
   ]);
   return {
     totalRevenue,
@@ -142,5 +150,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
     topSpecialties,
     todayAppointments,
     dailyAppointmentsData,
+    doctors,
+    patients,
   };
 };
