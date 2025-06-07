@@ -71,7 +71,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
       },
     },
   });
-
+  console.log(todayAppointments);
   return (
     <PageContainer>
       <PageHeader>
