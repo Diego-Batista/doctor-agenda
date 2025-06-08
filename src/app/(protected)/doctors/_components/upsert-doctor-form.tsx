@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
@@ -35,6 +36,7 @@ import {
 import { doctorsTable } from "@/db/schema";
 
 import { medicalSpecialties } from "../_constants";
+import { UploadButton } from "./UploadButton";
 
 const formSchema = z
   .object({
@@ -55,6 +57,7 @@ const formSchema = z
     availableToTime: z.string().min(1, {
       message: "Hora de término é obrigatória.",
     }),
+    avatarImageUrl: z.string().url().optional(),
   })
   .refine(
     (data) => {
@@ -86,6 +89,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
       availableToWeekDay: doctor?.availableToWeekDay?.toString() ?? "5",
       availableFromTime: doctor?.availableFromTime ?? "",
       availableToTime: doctor?.availableToTime ?? "",
+      avatarImageUrl: doctor?.avatarImageUrl ?? "",
     },
   });
   const upsertDoctorAction = useAction(upsertDoctor, {
@@ -120,6 +124,38 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="avatarImageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Foto do médico</FormLabel>
+                <FormControl>
+                  <div>
+                    <UploadButton
+                      label="Selecionar Foto"
+                      accept="image/*"
+                      onUploadComplete={(url) =>
+                        form.setValue("avatarImageUrl", url)
+                      }
+                    />
+                    <input type="hidden" {...form.register("avatarImageUrl")} />
+
+                    {field.value && (
+                      <Image
+                        src={field.value}
+                        alt="Foto do médico"
+                        width={128}
+                        height={128}
+                        className="mt-2 h-32 w-32 rounded object-cover"
+                      />
+                    )}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="name"

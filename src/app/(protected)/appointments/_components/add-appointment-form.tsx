@@ -150,15 +150,31 @@ const UpsertAppointmentForm = ({
     });
   };
 
+  const normalizeWeekDay = (day: number) => (day === 7 ? 0 : day); // domingo (7) vira 0
+
   const isDateAvailable = (date: Date) => {
+    const weekDay = date.getDay(); // 0 (domingo) até 6 (sábado)
     const selectedDoctor = doctors.find((d) => d.id === selectedDoctorId);
-    if (!selectedDoctor) return false;
-    const dayOfWeek = date.getDay();
-    return (
-      dayOfWeek >= selectedDoctor.availableFromWeekDay &&
-      dayOfWeek <= selectedDoctor.availableToWeekDay
-    );
+    const from = normalizeWeekDay(selectedDoctor?.availableFromWeekDay ?? 0);
+    const to = normalizeWeekDay(selectedDoctor?.availableToWeekDay ?? 0);
+
+    if (from <= to) {
+      return weekDay >= from && weekDay <= to;
+    }
+
+    // Caso a faixa cruze o fim de semana (ex: de sexta a segunda)
+    return weekDay >= from || weekDay <= to;
   };
+
+  // const isDateAvailable = (date: Date) => {
+  //   const selectedDoctor = doctors.find((d) => d.id === selectedDoctorId);
+  //   if (!selectedDoctor) return false;
+  //   const dayOfWeek = date.getDay();
+  //   return (
+  //     dayOfWeek >= selectedDoctor.availableFromWeekDay &&
+  //     dayOfWeek <= selectedDoctor.availableToWeekDay
+  //   );
+  // };
 
   const isDateTimeEnabled = !!selectedPatientId && !!selectedDoctorId;
 

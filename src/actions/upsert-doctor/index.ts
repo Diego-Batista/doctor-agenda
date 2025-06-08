@@ -19,6 +19,7 @@ export const upsertDoctor = actionClient
   .action(async ({ parsedInput }) => {
     const availableFromTime = parsedInput.availableFromTime; // 15:30:00
     const availableToTime = parsedInput.availableToTime; // 16:00:00
+    const { id, avatarImageUrl, ...rest } = parsedInput;
 
     const availableFromTimeUTC = dayjs()
       .set("hour", parseInt(availableFromTime.split(":")[0]))
@@ -43,18 +44,20 @@ export const upsertDoctor = actionClient
     await db
       .insert(doctorsTable)
       .values({
-        ...parsedInput,
-        id: parsedInput.id,
-        clinicId: session?.user.clinic?.id,
+        ...rest,
+        id,
+        clinicId: session.user.clinic.id,
         availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
         availableToTime: availableToTimeUTC.format("HH:mm:ss"),
+        ...(avatarImageUrl ? { avatarImageUrl } : {}),
       })
       .onConflictDoUpdate({
         target: [doctorsTable.id],
         set: {
-          ...parsedInput,
+          ...rest,
           availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
           availableToTime: availableToTimeUTC.format("HH:mm:ss"),
+          ...(avatarImageUrl ? { avatarImageUrl } : {}), // só atualiza se tiver valor
         },
       });
     revalidatePath("/doctors");

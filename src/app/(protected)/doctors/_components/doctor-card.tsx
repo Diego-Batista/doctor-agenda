@@ -6,6 +6,7 @@ import {
   DollarSignIcon,
   TrashIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -70,8 +71,19 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
     <Card className="px-6 pt-5">
       <CardHeader className="px-0">
         <div className="flex items-center gap-2">
-          <Avatar className="mr-3 h-16 w-16">
-            <AvatarFallback>{doctorInitials}</AvatarFallback>
+          <Avatar className="mr-3 h-20 w-20">
+            {doctor.avatarImageUrl ? (
+              <Image
+                src={doctor.avatarImageUrl}
+                alt={`Foto do Dr. ${doctor.name}`}
+                fill
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <AvatarFallback className="text-2xl">
+                {doctorInitials}
+              </AvatarFallback>
+            )}
           </Avatar>
           <div className="flex w-full flex-col">
             <h3 className="text-sm font-medium">Dr. {doctor.name}</h3>
@@ -88,7 +100,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
       <CardContent className="my-5 flex flex-col gap-3">
         <Badge variant="primary">
           <CalendarIcon className="mr-1" />
-          {availability.from.format("dddd")} a {availability.to.format("dddd")}
+          {availability.fromWeekDay} a {availability.toWeekDay}
         </Badge>
         <Badge variant="primary">
           <ClockIcon className="mr-1" />

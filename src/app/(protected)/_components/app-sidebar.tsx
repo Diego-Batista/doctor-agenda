@@ -4,25 +4,17 @@ import {
   CalendarDays,
   Gem,
   LayoutDashboard,
-  LogOut,
   Stethoscope,
   UsersRound,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -31,8 +23,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+
+import { UserMenu } from "./UserMenu";
 
 const items = [
   {
@@ -58,19 +51,12 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const router = useRouter();
-  const session = authClient.useSession();
   const pathname = usePathname();
 
-  const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/authentication");
-        },
-      },
-    });
-  };
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
@@ -126,35 +112,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
-                  <Avatar>
-                    <AvatarFallback>F</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm">
-                      {session.data?.user?.clinic?.name}
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                      {session.data?.user.email}
-                    </p>
-                  </div>
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut />
-                  Sair
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      {mounted && <UserMenu />}
     </Sidebar>
   );
 }

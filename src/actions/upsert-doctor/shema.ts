@@ -20,6 +20,10 @@ export const upsertDoctorSchema = z
     availableToTime: z.string().min(1, {
       message: "Hora de término é obrigatória.",
     }),
+    avatarImageUrl: z
+      .string()
+      .url({ message: "URL da imagem inválida." })
+      .optional(), // <- Adicionado aqui
   })
   .refine(
     (data) => {

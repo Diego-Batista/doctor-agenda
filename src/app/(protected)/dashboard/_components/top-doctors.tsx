@@ -1,4 +1,5 @@
 import { Stethoscope } from "lucide-react";
+import Image from "next/image";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
@@ -29,14 +30,23 @@ export default function TopDoctors({ doctors }: TopDoctorsProps) {
           {doctors.map((doctor) => (
             <div key={doctor.id} className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Avatar className="h-10 w-10">
-                  <AvatarFallback className="bg-gray-100 text-lg font-medium text-gray-600">
-                    {doctor.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .slice(0, 2)}
-                  </AvatarFallback>
+                <Avatar className="h-14 w-14">
+                  {doctor.avatarImageUrl ? (
+                    <Image
+                      src={doctor.avatarImageUrl}
+                      alt={`Foto do Dr. ${doctor.name}`}
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <AvatarFallback className="bg-gray-100 text-lg font-medium text-gray-600">
+                      {doctor.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <div>
                   <h3 className="text-sm">{doctor.name}</h3>
