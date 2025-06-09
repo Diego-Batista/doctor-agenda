@@ -1,6 +1,7 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { EditIcon, LogOut } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -8,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -32,10 +34,19 @@ export function UserMenu() {
     });
   };
 
+  const handleEditClinic = () => {
+    router.push("/clinic-settings");
+  };
+
   if (!session.data) {
     // Enquanto não tiver sessão carregada, não renderiza nada
     return null;
   }
+
+  const clinicInitials = session.data.user.clinic?.name
+    .split(" ")
+    .map((name) => name[0])
+    .join("");
 
   return (
     <SidebarFooter>
@@ -44,8 +55,19 @@ export function UserMenu() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton size="lg">
-                <Avatar>
-                  <AvatarFallback>F</AvatarFallback>
+                <Avatar className="mr-3 h-12 w-12">
+                  {session.data.user.clinic?.imageUrl ? (
+                    <Image
+                      src={session.data.user.clinic?.imageUrl}
+                      alt={`Logo da clínica. ${session.data.user.clinic?.name}`}
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <AvatarFallback className="text-2xl">
+                      {clinicInitials}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <div>
                   <p className="text-sm">{session.data.user.clinic?.name}</p>
@@ -56,6 +78,11 @@ export function UserMenu() {
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+              <DropdownMenuItem onClick={handleEditClinic}>
+                <EditIcon />
+                Editar
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut />
                 Sair

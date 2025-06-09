@@ -2,13 +2,15 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, Globe, Mail, MapPin, Phone } from "lucide-react";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { createClinic } from "@/actions/create-clinic/index";
+import { updateClinic } from "@/actions/update-clinic";
+import { UploadButton } from "@/app/(protected)/doctors/_components/UploadButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,35 +28,55 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { clinicsTable } from "@/db/schema";
 
-import { UploadButton } from "../../doctors/_components/UploadButton";
-
-const clinicFormSchema = z.object({
-  name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
-  address: z.string().trim(),
-  phoneNumber: z.string().trim(),
-  email: z.string().email().or(z.literal("")),
-  website: z.string().url().optional().or(z.literal("")),
-  imageUrl: z.string().url().optional().or(z.literal("")),
+const formSchema = z.object({
+  name: z.string().trim().min(1, {
+    message: "Nome da clínica é obrigatório.",
+  }),
+  address: z.string().trim().optional(),
+  phoneNumber: z.string().trim().optional(),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  website: z.string().url("URL inválida").optional().or(z.literal("")),
+  imageUrl: z.string().url("URL inválida").optional().or(z.literal("")),
 });
 
-const ClinicForm = () => {
-  const form = useForm<z.infer<typeof clinicFormSchema>>({
-    resolver: zodResolver(clinicFormSchema),
+interface ClinicSettingsFormProps {
+  clinic: typeof clinicsTable.$inferSelect;
+}
+
+export default function ClinicSettingsForm({
+  clinic,
+}: ClinicSettingsFormProps) {
+  const router = useRouter();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name: clinic.name,
+      address: clinic.address,
+      phoneNumber: clinic.phoneNumber,
+      email: clinic.email,
+      website: clinic.website ?? "",
+      imageUrl: clinic.imageUrl ?? "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof clinicFormSchema>) => {
-    try {
-      await createClinic(data.name, data.address, data.phoneNumber, data.email);
-    } catch (error) {
-      if (isRedirectError(error)) {
-        return;
-      }
-      console.error(error);
-      toast.error("Erro ao criar clínica.");
+  const updateClinicAction = useAction(updateClinic, {
+    onSuccess: () => {
+      toast.success("Clínica atualizada com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao atualizar clínica.");
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    updateClinicAction.execute({
+      id: clinic.id,
+      ...values,
+    });
+    if (updateClinicAction.status === "hasSucceeded") {
+      router.push("/dashboard");
     }
   };
 
@@ -65,7 +87,9 @@ const ClinicForm = () => {
           <Building2 className="h-5 w-5" />
           Configurações da Clínica
         </CardTitle>
-        <CardDescription>Informações da sua clínica</CardDescription>
+        <CardDescription>
+          Atualize as informações da sua clínica
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -75,7 +99,7 @@ const ClinicForm = () => {
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Foto do médico</FormLabel>
+                  <FormLabel>Foto da clínica</FormLabel>
                   <FormControl>
                     <div>
                       <UploadButton
@@ -197,8 +221,10 @@ const ClinicForm = () => {
             />
 
             <div className="pt-4">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? "Salvando..." : "Criar clínica"}
+              <Button type="submit" disabled={updateClinicAction.isPending}>
+                {updateClinicAction.isPending
+                  ? "Salvando..."
+                  : "Salvar Alterações"}
               </Button>
             </div>
           </form>
@@ -206,6 +232,4 @@ const ClinicForm = () => {
       </CardContent>
     </Card>
   );
-};
-
-export default ClinicForm;
+}

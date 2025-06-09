@@ -1,14 +1,16 @@
 import { eq } from "drizzle-orm";
 import { ArrowLeft, BarChart3, Users } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type React from "react";
 
+import { logoutDoctor } from "@/actions/doctor/logout-doctor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
 import { doctorsTable } from "@/db/schema";
+import { verifyDoctorAccess } from "@/lib/auth-doctor";
 
 interface DoctorLayoutProps {
   children: React.ReactNode;
@@ -20,6 +22,33 @@ export default async function DoctorLayout({
   params,
 }: DoctorLayoutProps) {
   const { doctorId } = await params;
+
+  // Verificar se o médico tem acesso a esta página
+  const verification = await verifyDoctorAccess(doctorId);
+
+  if (!verification.authorized) {
+    if (verification.reason === "not_authenticated") {
+      redirect(
+        "/doctor/login?redirect=" + encodeURIComponent(`/doctor/${doctorId}`),
+      );
+    } else {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <h1 className="mb-4 text-2xl font-bold text-red-600">
+              Acesso Negado
+            </h1>
+            <p className="text-muted-foreground mb-4">
+              Você não tem permissão para acessar esta página.
+            </p>
+            <Button asChild>
+              <Link href="/doctor/login">Fazer Login</Link>
+            </Button>
+          </div>
+        </div>
+      );
+    }
+  }
 
   const doctor = await db.query.doctorsTable.findFirst({
     where: eq(doctorsTable.id, doctorId),
@@ -65,6 +94,11 @@ export default async function DoctorLayout({
                   </p>
                 </div>
               </div>
+              <form action={logoutDoctor}>
+                <Button variant="outline" size="sm" type="submit">
+                  Sair
+                </Button>
+              </form>
             </div>
           </div>
         </div>
