@@ -6,7 +6,7 @@ import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { upsertDoctor } from "@/actions/upsert-doctor";
+import { upsertDoctor } from "@/actions/upsert-doctor/upsert-doctor";
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,
@@ -36,6 +36,7 @@ import {
 import { doctorsTable } from "@/db/schema";
 
 import { medicalSpecialties } from "../_constants";
+import { PasswordField } from "./inputPassword";
 import { UploadButton } from "./UploadButton";
 
 const formSchema = z
@@ -43,6 +44,15 @@ const formSchema = z
     name: z.string().trim().min(1, {
       message: "Nome é obrigatório.",
     }),
+    email: z.string().email({
+      message: "Email inválido.",
+    }),
+    password: z
+      .string()
+      .min(6, {
+        message: "Senha deve ter pelo menos 6 caracteres.",
+      })
+      .optional(),
     specialty: z.string().trim().min(1, {
       message: "Especialidade é obrigatória.",
     }),
@@ -81,6 +91,8 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: doctor?.name ?? "",
+      email: doctor?.email ?? "",
+      password: doctor?.password ?? "",
       specialty: doctor?.specialty ?? "",
       appointmentPrice: doctor?.appointmentPriceInCents
         ? doctor.appointmentPriceInCents / 100
@@ -113,7 +125,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
   };
 
   return (
-    <DialogContent>
+    <DialogContent className="">
       <DialogHeader>
         <DialogTitle>{doctor ? doctor.name : "Adicionar médico"}</DialogTitle>
         <DialogDescription>
@@ -123,7 +135,10 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
         </DialogDescription>
       </DialogHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="scrollbar-hide max-h-[700px] space-y-4 overflow-scroll"
+        >
           <FormField
             control={form.control}
             name="avatarImageUrl"
@@ -163,12 +178,26 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
               <FormItem>
                 <FormLabel>Nome</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} placeholder="john doe" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="johndoe@example.com" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <PasswordField control={form.control} name="password" label="Senha" />
           <FormField
             control={form.control}
             name="specialty"

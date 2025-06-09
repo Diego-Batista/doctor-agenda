@@ -68,7 +68,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
   const availability = getAvailability(doctor);
 
   return (
-    <Card className="px-6 pt-5">
+    <Card className="max-w-[300px] px-6 pt-5">
       <CardHeader className="px-0">
         <div className="flex items-center gap-2">
           <Avatar className="mr-3 h-20 w-20">
@@ -97,7 +97,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
         </div>
       </CardHeader>
       <Separator />
-      <CardContent className="my-5 flex flex-col gap-3">
+      <CardContent className="my-5 flex flex-col gap-3 px-0">
         <Badge variant="primary">
           <CalendarIcon className="mr-1" />
           {availability.fromWeekDay} a {availability.toWeekDay}
@@ -113,7 +113,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
         </Badge>
       </CardContent>
       <Separator />
-      <CardFooter className="flex flex-col gap-2">
+      <CardFooter className="flex flex-col gap-2 p-0">
         <Dialog
           open={isUpsertDoctorDialogOpen}
           onOpenChange={setIsUpsertDoctorDialogOpen}

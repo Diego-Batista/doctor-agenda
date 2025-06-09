@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { createDoctorWithAuth } from "@/actions/doctor/create-doctor-with-auth";
+import { createDoctorWithAuth } from "@/actions/upsert-doctor/create-doctor-with-auth";
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,

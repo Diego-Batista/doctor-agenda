@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { loginDoctor } from "@/actions/doctor/login-doctor";
+import { loginDoctor } from "@/actions/upsert-doctor/login-doctor";
 import { Button } from "@/components/ui/button";
 import {
   Card,

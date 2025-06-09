@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type React from "react";
 
-import { logoutDoctor } from "@/actions/doctor/logout-doctor";
+import { logoutDoctor } from "@/actions/upsert-doctor/logout-doctor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";

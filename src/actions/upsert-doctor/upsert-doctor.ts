@@ -51,17 +51,21 @@ export const upsertDoctor = actionClient
       availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
       availableToTime: availableToTimeUTC.format("HH:mm:ss"),
       ...(avatarImageUrl ? { avatarImageUrl } : {}),
+      password,
     };
 
     // Se há senha, fazer hash
     if (password) {
-      const hashedPassword = await bcrypt.hash(password, 12);
+      const hashedPassword = await bcrypt.hash(password, 10);
       doctorData.password = hashedPassword;
     }
 
     await db
       .insert(doctorsTable)
-      .values(doctorData)
+      .values({
+        ...doctorData,
+        password: doctorData.password || "", // Ensure password is never undefined
+      })
       .onConflictDoUpdate({
         target: [doctorsTable.id],
         set: {
@@ -70,7 +74,7 @@ export const upsertDoctor = actionClient
           availableToTime: availableToTimeUTC.format("HH:mm:ss"),
           ...(avatarImageUrl ? { avatarImageUrl } : {}),
           // Só atualiza senha se foi fornecida
-          ...(password ? { password: await bcrypt.hash(password, 12) } : {}),
+          ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
         },
       });
     revalidatePath("/doctors");
