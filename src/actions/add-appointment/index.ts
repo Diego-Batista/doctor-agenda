@@ -56,4 +56,5 @@ export const upsertAppointment = actionClient
 
     revalidatePath("/appointments");
     revalidatePath("/dashboard");
+    revalidatePath("/doctor/[doctorId]");
   });

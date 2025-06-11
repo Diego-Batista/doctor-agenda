@@ -65,6 +65,7 @@ export const loginDoctor = actionClient
         doctorId: doctor.id,
       };
     } catch (error) {
+      console.error("Erro ao fazer login:", error);
       return {
         success: false,
         error: "Erro interno do servidor",

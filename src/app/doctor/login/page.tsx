@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Stethoscope } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -40,8 +40,6 @@ export default function DoctorLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/doctor";
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -63,6 +61,7 @@ export default function DoctorLogin() {
         toast.error(result?.data?.error || "Erro ao fazer login");
       }
     } catch (error) {
+      console.error("Erro ao fazer login:", error);
       toast.error("Erro interno do servidor");
     } finally {
       setIsLoading(false);

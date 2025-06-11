@@ -2,7 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { PatternFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -31,71 +33,54 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { patientsTable } from "@/db/schema";
+import { patientsTable } from "@/db/schema";
 
-const formSchema = z
-  .object({
-    name: z.string().trim().min(1, {
-      message: "Nome é obrigatório.",
-    }),
-    email: z.string().email({
-      message: "Email inválido.",
-    }),
-    password: z
-      .string()
-      .min(6, {
-        message: "Senha deve ter pelo menos 6 caracteres.",
-      })
-      .optional(),
-    confirmPassword: z.string().optional(),
-    phoneNumber: z.string().trim().min(1, {
-      message: "Telefone é obrigatório.",
-    }),
-    sex: z.enum(["male", "female"], {
-      required_error: "Sexo é obrigatório.",
-    }),
-  })
-  .refine(
-    (data) => {
-      if (data.password && data.password !== data.confirmPassword) {
-        return false;
-      }
-      return true;
-    },
-    {
-      message: "Senhas não coincidem.",
-      path: ["confirmPassword"],
-    },
-  );
+const formSchema = z.object({
+  name: z.string().trim().min(1, {
+    message: "Nome é obrigatório.",
+  }),
+  email: z.string().email({
+    message: "Email inválido.",
+  }),
+  phoneNumber: z.string().trim().min(1, {
+    message: "Número de telefone é obrigatório.",
+  }),
+  sex: z.enum(["male", "female"], {
+    required_error: "Sexo é obrigatório.",
+  }),
+});
 
 interface UpsertPatientFormProps {
+  isOpen: boolean;
   patient?: typeof patientsTable.$inferSelect;
   onSuccess?: () => void;
 }
 
-export default function UpsertPatientForm({
+const UpsertPatientForm = ({
   patient,
   onSuccess,
-}: UpsertPatientFormProps) {
+  isOpen,
+}: UpsertPatientFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
+    shouldUnregister: true,
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: patient?.name ?? "",
       email: patient?.email ?? "",
-      password: "",
-      confirmPassword: "",
       phoneNumber: patient?.phoneNumber ?? "",
-      sex: patient?.sex ?? "male",
+      sex: patient?.sex ?? undefined,
     },
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      form.reset(patient);
+    }
+  }, [isOpen, form, patient]);
+
   const upsertPatientAction = useAction(upsertPatient, {
     onSuccess: () => {
-      toast.success(
-        patient
-          ? "Paciente atualizado com sucesso."
-          : "Paciente adicionado com sucesso.",
-      );
+      toast.success("Paciente salvo com sucesso.");
       onSuccess?.();
     },
     onError: () => {
@@ -114,11 +99,11 @@ export default function UpsertPatientForm({
     <DialogContent>
       <DialogHeader>
         <DialogTitle>
-          {patient ? `Editar ${patient.name}` : "Adicionar paciente"}
+          {patient ? patient.name : "Adicionar paciente"}
         </DialogTitle>
         <DialogDescription>
           {patient
-            ? "Edite as informações deste paciente."
+            ? "Edite as informações desse paciente."
             : "Adicione um novo paciente."}
         </DialogDescription>
       </DialogHeader>
@@ -129,9 +114,12 @@ export default function UpsertPatientForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome</FormLabel>
+                <FormLabel>Nome do paciente</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    placeholder="Digite o nome completo do paciente"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -146,7 +134,7 @@ export default function UpsertPatientForm({
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="medico@clinica.com"
+                    placeholder="exemplo@email.com"
                     {...field}
                   />
                 </FormControl>
@@ -154,53 +142,23 @@ export default function UpsertPatientForm({
               </FormItem>
             )}
           />
-
-          {!patient && (
-            <>
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Senha</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Digite a senha"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirmar Senha</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Confirme a senha"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
           <FormField
             control={form.control}
             name="phoneNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Telefone</FormLabel>
+                <FormLabel>Número de telefone</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <PatternFormat
+                    format="(##) #####-####"
+                    mask="_"
+                    placeholder="(11) 99999-9999"
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value.value);
+                    }}
+                    customInput={Input}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -217,7 +175,7 @@ export default function UpsertPatientForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Selecione o sexo" />
                     </SelectTrigger>
                   </FormControl>
@@ -231,16 +189,18 @@ export default function UpsertPatientForm({
             )}
           />
           <DialogFooter>
-            <Button type="submit" disabled={upsertPatientAction.isPending}>
-              {upsertPatientAction.isPending
-                ? "Salvando..."
-                : patient
-                  ? "Salvar"
-                  : "Adicionar"}
+            <Button
+              type="submit"
+              disabled={upsertPatientAction.isPending}
+              className="w-full"
+            >
+              {upsertPatientAction.isPending ? "Salvando..." : "Salvar"}
             </Button>
           </DialogFooter>
         </form>
       </Form>
     </DialogContent>
   );
-}
+};
+
+export default UpsertPatientForm;

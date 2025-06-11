@@ -7,7 +7,8 @@ import {
   Users,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { AppointmentStatusCell } from "@/app/(protected)/appointments/_components/appointment-status-cell";
+import { StatusType } from "@/app/(protected)/appointments/_components/status-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
 import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
@@ -72,13 +73,6 @@ export default async function DoctorDashboard({
   if (!doctor) {
     return <div>Médico não encontrado</div>;
   }
-
-  const statusColors = {
-    confirmado: "bg-green-100 text-green-800",
-    aguardando: "bg-yellow-100 text-yellow-800",
-    finalizado: "bg-blue-100 text-blue-800",
-    faltou: "bg-red-100 text-red-800",
-  };
 
   return (
     <div className="space-y-8">
@@ -189,9 +183,10 @@ export default async function DoctorDashboard({
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Badge className={statusColors[appointment.status]}>
-                      {appointment.status}
-                    </Badge>
+                    <AppointmentStatusCell
+                      appointmentId={appointment.id}
+                      status={appointment.status as StatusType}
+                    />
                     <span className="font-medium">
                       {formatCurrencyInCents(
                         appointment.appointmentPriceInCents,

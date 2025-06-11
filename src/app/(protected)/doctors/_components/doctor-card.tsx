@@ -67,6 +67,8 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
     .join("");
   const availability = getAvailability(doctor);
 
+  console.log(availability.from.format("HH:mm"));
+
   return (
     <Card className="max-w-[300px] px-6 pt-5">
       <CardHeader className="px-0">
@@ -104,7 +106,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
         </Badge>
         <Badge variant="primary">
           <ClockIcon className="mr-1" />
-          {availability.from.format("HH:mm")} as{" "}
+          {availability.from.format("HH:mm")} às{" "}
           {availability.to.format("HH:mm")}
         </Badge>
         <Badge variant="primary">

@@ -17,10 +17,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import UpsertPatientForm from "@/components/upsert-patient-form";
 import { db } from "@/db";
 import { appointmentsTable, patientsTable } from "@/db/schema";
 import { formatCurrencyInCents } from "@/helpers/currency";
+
+import PacientForm from "./_components/pacientForm";
 
 interface PatientDetailsProps {
   params: Promise<{ doctorId: string; patientId: string }>;
@@ -117,7 +118,8 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
                   Editar Paciente
                 </Button>
               </DialogTrigger>
-              <UpsertPatientForm patient={patient} />
+
+              <PacientForm patient={patient} />
             </Dialog>
           </div>
         </CardHeader>

@@ -17,9 +17,13 @@ export async function getCurrentDoctor() {
     const doctor = await db.query.doctorsTable.findFirst({
       where: eq(doctorsTable.id, doctorId),
     });
+    if (!doctor) {
+      return null;
+    }
 
     return doctor;
   } catch (error) {
+    console.error("Error fetching doctor:", error);
     return null;
   }
 }
