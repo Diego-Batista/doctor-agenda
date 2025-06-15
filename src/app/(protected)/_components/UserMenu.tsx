@@ -1,9 +1,10 @@
 "use client";
 
-import { EditIcon, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import ClinicSettingsModal from "@/app/clinic-settings/_components/clinic-settings-modal";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -18,11 +19,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useClinic } from "@/hooks/useClinic";
 import { authClient } from "@/lib/auth-client";
 
 export function UserMenu() {
   const router = useRouter();
   const session = authClient.useSession();
+  const { clinic } = useClinic();
 
   const handleSignOut = async () => {
     await authClient.signOut({
@@ -34,10 +37,6 @@ export function UserMenu() {
     });
   };
 
-  const handleEditClinic = () => {
-    router.push("/clinic-settings");
-  };
-
   if (!session.data) {
     // Enquanto não tiver sessão carregada, não renderiza nada
     return null;
@@ -47,6 +46,8 @@ export function UserMenu() {
     .split(" ")
     .map((name) => name[0])
     .join("");
+
+  console.log(clinic);
 
   return (
     <SidebarFooter>
@@ -78,10 +79,7 @@ export function UserMenu() {
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={handleEditClinic}>
-                <EditIcon />
-                Editar
-              </DropdownMenuItem>
+              <div>{clinic && <ClinicSettingsModal clinic={clinic} />}</div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut />

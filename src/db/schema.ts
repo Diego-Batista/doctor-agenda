@@ -124,6 +124,7 @@ export const doctorsTable = pgTable("doctors", {
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   avatarImageUrl: text("avatar_image_url"),
+  phoneNumber: text("phone_number"),
   // 1 - Monday, 2 - Tuesday, 3 - Wednesday, 4 - Thursday, 5 - Friday, 6 - Saturday, 0 - Sunday
   availableFromWeekDay: integer("available_from_week_day").notNull(),
   availableToWeekDay: integer("available_to_week_day").notNull(),

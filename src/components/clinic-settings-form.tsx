@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, Globe, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -48,7 +47,6 @@ interface ClinicSettingsFormProps {
 export default function ClinicSettingsForm({
   clinic,
 }: ClinicSettingsFormProps) {
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,9 +73,6 @@ export default function ClinicSettingsForm({
       id: clinic.id,
       ...values,
     });
-    if (updateClinicAction.status === "hasSucceeded") {
-      router.push("/dashboard");
-    }
   };
 
   return (

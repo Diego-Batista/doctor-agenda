@@ -33,6 +33,13 @@ export const upsertDoctorSchema = z
       .string()
       .url({ message: "URL da imagem inválida." })
       .optional(),
+    phoneNumber: z
+      .string()
+      .trim()
+      .min(1, {
+        message: "Número de telefone é obrigatório.",
+      })
+      .optional(),
   })
   .refine(
     (data) => {

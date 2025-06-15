@@ -22,6 +22,16 @@ export default async function DoctorPatients({
   const { doctorId } = await params;
   const { search } = await searchParams;
 
+  const formatPhoneNumber = (phone: string) => {
+    // Remove all non-numeric characters
+    const cleaned = phone.replace(/\D/g, "");
+    // Format as (XX) XXXXX-XXXX
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    }
+    return phone;
+  };
+
   // Buscar pacientes do médico com contagem de consultas
   const patientsWithAppointments = await db
     .select({
@@ -132,7 +142,7 @@ export default async function DoctorPatients({
                       Telefone:
                     </span>
                     <span className="text-sm font-medium">
-                      {patient.phoneNumber}
+                      {formatPhoneNumber(patient.phoneNumber)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">

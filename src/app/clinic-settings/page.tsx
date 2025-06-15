@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import ClinicSettingsForm from "@/components/clinic-settings-form";
 import {
+  PageActions,
   PageContainer,
   PageDescription,
   PageHeader,
@@ -13,6 +14,8 @@ import {
 import { db } from "@/db";
 import { clinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
+
+import ClinicSettingsModal from "./_components/clinic-settings-modal";
 
 export default async function ClinicSettingsPage() {
   const session = await auth.api.getSession({
@@ -49,6 +52,9 @@ export default async function ClinicSettingsPage() {
       <div className="flex justify-center">
         <ClinicSettingsForm clinic={clinic} />
       </div>
+      <PageActions>
+        <ClinicSettingsModal clinic={clinic} />
+      </PageActions>
     </PageContainer>
   );
 }

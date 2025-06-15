@@ -21,6 +21,7 @@ export const upsertDoctor = actionClient
     const {
       id,
       avatarImageUrl,
+      phoneNumber,
       password,
       availableFromTime,
       availableToTime,
@@ -56,6 +57,7 @@ export const upsertDoctor = actionClient
       availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
       availableToTime: availableToTimeUTC.format("HH:mm:ss"),
       ...(avatarImageUrl ? { avatarImageUrl } : {}),
+      phoneNumber,
     };
 
     await db

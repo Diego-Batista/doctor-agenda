@@ -30,6 +30,16 @@ interface PatientDetailsProps {
 export default async function PatientDetails({ params }: PatientDetailsProps) {
   const { doctorId, patientId } = await params;
 
+  const formatPhoneNumber = (phone: string) => {
+    // Remove all non-numeric characters
+    const cleaned = phone.replace(/\D/g, "");
+    // Format as (XX) XXXXX-XXXX
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    }
+    return phone;
+  };
+
   const [patient, appointments, stats] = await Promise.all([
     db.query.patientsTable.findFirst({
       where: eq(patientsTable.id, patientId),
@@ -100,7 +110,9 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
                   </div>
                   <div className="flex items-center gap-1">
                     <Phone className="h-4 w-4" />
-                    <span className="text-sm">{patient.phoneNumber}</span>
+                    <span className="text-sm">
+                      {formatPhoneNumber(patient.phoneNumber)}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <User className="h-4 w-4" />

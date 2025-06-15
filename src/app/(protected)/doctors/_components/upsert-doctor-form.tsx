@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
+import { NumericFormat, PatternFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -36,6 +36,7 @@ import {
 import { doctorsTable } from "@/db/schema";
 
 import { medicalSpecialties } from "../_constants";
+import { ConfirmPasswordField } from "./confirmePassword";
 import { PasswordField } from "./inputPassword";
 import { UploadButton } from "./UploadButton";
 
@@ -47,12 +48,16 @@ const formSchema = z
     email: z.string().email({
       message: "Email inválido.",
     }),
+    phoneNumber: z.string().trim().min(1, {
+      message: "Número de telefone é obrigatório.",
+    }),
     password: z
       .string()
       .min(6, {
         message: "Senha deve ter pelo menos 6 caracteres.",
       })
       .optional(),
+    confirmPassword: z.string().optional(),
     specialty: z.string().trim().min(1, {
       message: "Especialidade é obrigatória.",
     }),
@@ -78,6 +83,18 @@ const formSchema = z
         "O horário de início não pode ser anterior ao horário de término.",
       path: ["availableToTime"],
     },
+  )
+  .refine(
+    (data) => {
+      if (data.password && data.password !== data.confirmPassword) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Senhas não coincidem.",
+      path: ["confirmPassword"],
+    },
   );
 
 interface UpsertDoctorFormProps {
@@ -92,7 +109,9 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
     defaultValues: {
       name: doctor?.name ?? "",
       email: doctor?.email ?? "",
-      password: doctor?.password ?? "",
+      phoneNumber: doctor?.phoneNumber ?? "",
+      password: "",
+      confirmPassword: "",
       specialty: doctor?.specialty ?? "",
       appointmentPrice: doctor?.appointmentPriceInCents
         ? doctor.appointmentPriceInCents / 100
@@ -197,7 +216,34 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Número de telefone</FormLabel>
+                <FormControl>
+                  <PatternFormat
+                    format="(##) #####-####"
+                    mask="_"
+                    placeholder="(11) 99999-9999"
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value.value);
+                    }}
+                    customInput={Input}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <PasswordField control={form.control} name="password" label="Senha" />
+          <ConfirmPasswordField
+            control={form.control}
+            name="confirmPassword"
+            label="Confirmar senha"
+          />
           <FormField
             control={form.control}
             name="specialty"
