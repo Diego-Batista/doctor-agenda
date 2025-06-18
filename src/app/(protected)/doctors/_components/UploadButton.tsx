@@ -46,7 +46,7 @@ export function UploadButton({
   return (
     <label
       htmlFor="file-upload"
-      className={`inline-flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+      className={`text-primary bg-primary-foreground inline-flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-gray-300 px-3 py-2 text-sm font-medium hover:bg-gray-50 ${
         loading ? "cursor-not-allowed opacity-50" : ""
       }`}
       aria-disabled={loading}

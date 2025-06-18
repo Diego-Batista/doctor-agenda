@@ -79,11 +79,11 @@ export default async function DoctorDashboard({
       {/* Estatísticas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 text-[#5B7189]">
+            <CardTitle className="text-sm font-medium text-[#5B7189]">
               Total de Pacientes
             </CardTitle>
-            <Users className="text-muted-foreground h-4 w-4" />
+            <Users className="text-primary h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -97,10 +97,10 @@ export default async function DoctorDashboard({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-[#5B7189]">
               Total de Consultas
             </CardTitle>
-            <CalendarDays className="text-muted-foreground h-4 w-4" />
+            <CalendarDays className="text-primary h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -114,10 +114,10 @@ export default async function DoctorDashboard({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-[#5B7189]">
               Receita Mensal
             </CardTitle>
-            <DollarSign className="text-muted-foreground h-4 w-4" />
+            <DollarSign className="text-muted-foreground text-primary h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -131,10 +131,10 @@ export default async function DoctorDashboard({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-[#5B7189]">
               Preço por Consulta
             </CardTitle>
-            <TrendingUp className="text-muted-foreground h-4 w-4" />
+            <TrendingUp className="text-primary h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -148,8 +148,8 @@ export default async function DoctorDashboard({
       {/* Consultas Recentes */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-[#5B7189]">
+            <Clock className="text-primary h-5 w-5" />
             Consultas Recentes
           </CardTitle>
         </CardHeader>

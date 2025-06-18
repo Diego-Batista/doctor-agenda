@@ -1,7 +1,7 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+// import { Eye, EyeOff } from "lucide-react";
+// import { useState } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
 import {
@@ -24,7 +24,7 @@ export function PasswordField<T extends FieldValues>({
   name,
   label = "Senha",
 }: PasswordFieldProps<T>) {
-  const [showPassword, setShowPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormField
@@ -32,22 +32,22 @@ export function PasswordField<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-label-text">{label}</FormLabel>
           <FormControl>
             <div className="relative">
               <Input
                 {...field}
-                type={showPassword ? "text" : "password"}
+                type={"password"}
                 className="pr-10"
                 placeholder="******"
               />
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
+              </button> */}
             </div>
           </FormControl>
           <FormMessage />

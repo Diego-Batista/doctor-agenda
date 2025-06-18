@@ -105,16 +105,16 @@ export default async function DoctorLayout({
         <nav className="mb-8 flex space-x-8">
           <Link
             href={`/doctor/${doctorId}`}
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-white hover:shadow-sm"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-[#5B7189] transition-colors hover:bg-white hover:shadow-sm"
           >
-            <BarChart3 className="h-4 w-4" />
+            <BarChart3 className="text-primary h-4 w-4" />
             Dashboard
           </Link>
           <Link
             href={`/doctor/${doctorId}/patients`}
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-white hover:shadow-sm"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-[#5B7189] transition-colors hover:bg-white hover:shadow-sm"
           >
-            <Users className="h-4 w-4" />
+            <Users className="text-primary h-4 w-4" />
             Pacientes
           </Link>
         </nav>

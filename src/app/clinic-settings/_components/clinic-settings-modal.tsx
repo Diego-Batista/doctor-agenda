@@ -5,14 +5,7 @@ import { useState } from "react";
 
 import ClinicSettingsForm from "@/components/clinic-settings-form";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { clinicsTable } from "@/db/schema";
 
 interface ClinicSettingsModalProps {
@@ -33,13 +26,6 @@ export default function ClinicSettingsModal({
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Configurações da Clínica</DialogTitle>
-          <DialogDescription>
-            Atualize as informações da sua clínica. As alterações serão salvas
-            automaticamente.
-          </DialogDescription>
-        </DialogHeader>
         <div className="mt-4">
           <ClinicSettingsForm clinic={clinic} />
         </div>

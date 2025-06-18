@@ -78,8 +78,8 @@ export default function ClinicSettingsForm({
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Building2 className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-2xl font-bold">
+          <Building2 className="text-primary h-5 w-5" />
           Configurações da Clínica
         </CardTitle>
         <CardDescription>
@@ -94,7 +94,9 @@ export default function ClinicSettingsForm({
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Foto da clínica</FormLabel>
+                  <FormLabel className="text-label-text">
+                    Foto da clínica
+                  </FormLabel>
                   <FormControl>
                     <div>
                       <UploadButton
@@ -126,8 +128,8 @@ export default function ClinicSettingsForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4" />
+                  <FormLabel className="text-label-text flex items-center gap-2">
+                    <Building2 className="text-primary h-4 w-4" />
                     Nome da Clínica *
                   </FormLabel>
                   <FormControl>
@@ -143,8 +145,8 @@ export default function ClinicSettingsForm({
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
+                  <FormLabel className="text-label-text flex items-center gap-2">
+                    <MapPin className="text-primary h-4 w-4" />
                     Endereço
                   </FormLabel>
                   <FormControl>
@@ -164,8 +166,8 @@ export default function ClinicSettingsForm({
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Phone className="h-4 w-4" />
+                    <FormLabel className="text-label-text flex items-center gap-2">
+                      <Phone className="text-primary h-4 w-4" />
                       Telefone
                     </FormLabel>
                     <FormControl>
@@ -181,8 +183,8 @@ export default function ClinicSettingsForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Mail className="h-4 w-4" />
+                    <FormLabel className="text-label-text flex items-center gap-2">
+                      <Mail className="text-primary h-4 w-4" />
                       Email
                     </FormLabel>
                     <FormControl>
@@ -203,8 +205,8 @@ export default function ClinicSettingsForm({
               name="website"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
+                  <FormLabel className="text-label-text flex items-center gap-2">
+                    <Globe className="text-primary h-4 w-4" />
                     Website
                   </FormLabel>
                   <FormControl>
