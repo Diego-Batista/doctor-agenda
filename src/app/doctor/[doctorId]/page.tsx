@@ -9,6 +9,7 @@ import {
 
 import { AppointmentStatusCell } from "@/app/(protected)/appointments/_components/appointment-status-cell";
 import { StatusType } from "@/app/(protected)/appointments/_components/status-badge";
+import AppointmentsTableActions from "@/app/(protected)/appointments/_components/table-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
 import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
@@ -117,7 +118,7 @@ export default async function DoctorDashboard({
             <CardTitle className="text-sm font-medium text-[#5B7189]">
               Receita Mensal
             </CardTitle>
-            <DollarSign className="text-muted-foreground text-primary h-4 w-4" />
+            <DollarSign className="text-primary h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -192,6 +193,14 @@ export default async function DoctorDashboard({
                         appointment.appointmentPriceInCents,
                       )}
                     </span>
+                    <AppointmentsTableActions
+                      appointment={{
+                        ...appointment,
+                        doctor, // Certifique-se de que a variável 'doctor' está disponível no escopo
+                      }}
+                      patients={[appointment.patient]}
+                      doctors={[doctor]}
+                    />
                   </div>
                 </div>
               ))

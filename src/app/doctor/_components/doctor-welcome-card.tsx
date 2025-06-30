@@ -33,7 +33,9 @@ export function DoctorWelcomeCard({ doctor }: DoctorWelcomeCardProps) {
             <Image
               src={doctor.avatarImageUrl}
               alt={doctor.name}
-              className="mx-auto mb-4 h-16 w-16 rounded-full object-cover"
+              width={64}
+              height={64}
+              className="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
             />
           ) : (
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
@@ -43,12 +45,11 @@ export function DoctorWelcomeCard({ doctor }: DoctorWelcomeCardProps) {
           <CardTitle className="text-2xl font-bold">
             Bem-vindo, Dr. {doctor.name}!
           </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
           <div className="text-muted-foreground text-center">
             <p>Especialidade: {doctor.specialty || "Não informada"}</p>
           </div>
-
+        </CardHeader>
+        <CardContent className="space-y-4">
           <Button asChild className="w-full" size="lg">
             <Link href={`/doctor/${doctor.id}`}>
               <User className="mr-2 h-4 w-4" />

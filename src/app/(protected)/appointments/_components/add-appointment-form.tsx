@@ -198,7 +198,7 @@ const UpsertAppointmentForm = ({
             name="patientId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Paciente</FormLabel>
+                <FormLabel className="text-label-text">Paciente</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -227,7 +227,7 @@ const UpsertAppointmentForm = ({
             name="doctorId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Médico</FormLabel>
+                <FormLabel className="text-label-text">Médico</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -256,7 +256,9 @@ const UpsertAppointmentForm = ({
             name="appointmentPriceInCents"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Valor da consulta</FormLabel>
+                <FormLabel className="text-label-text">
+                  Valor da consulta
+                </FormLabel>
                 <NumericFormat
                   value={field.value}
                   onValueChange={(value) => {
@@ -282,7 +284,7 @@ const UpsertAppointmentForm = ({
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Data</FormLabel>
+                <FormLabel className="text-label-text">Data</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -294,7 +296,7 @@ const UpsertAppointmentForm = ({
                         )}
                         disabled={!isDateTimeEnabled}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <CalendarIcon className="text-label-text mr-2 h-4 w-4" />
                         {field.value
                           ? format(field.value, "PPP", { locale: ptBR })
                           : "Selecione uma data"}
@@ -326,7 +328,7 @@ const UpsertAppointmentForm = ({
             name="time"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Horário</FormLabel>
+                <FormLabel className="text-label-text">Horário</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
