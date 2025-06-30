@@ -12,6 +12,8 @@ import { db } from "@/db";
 import { doctorsTable } from "@/db/schema";
 import { verifyDoctorAccess } from "@/lib/auth-doctor";
 
+import EditDoctor from "./_components/edit-doctor";
+
 interface DoctorLayoutProps {
   children: React.ReactNode;
   params: Promise<{ doctorId: string }>;
@@ -70,25 +72,30 @@ export default async function DoctorLayout({
           <div className="flex h-full items-center justify-between">
             <div className="flex w-full items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <Avatar className="mr-3 h-14 w-14">
+                <Avatar className="mr-3 h-16 w-16">
                   {doctor.avatarImageUrl ? (
-                    <Image
-                      src={doctor.avatarImageUrl}
-                      alt={`Foto do Dr. ${doctor.name}`}
-                      fill
-                      className="rounded-full object-cover"
-                    />
+                    <div>
+                      <Image
+                        src={doctor.avatarImageUrl}
+                        alt={`Foto do Dr. ${doctor.name}`}
+                        width={64}
+                        height={64}
+                        className="h-16 w-16 rounded-full object-cover"
+                      />
+                    </div>
                   ) : (
                     <AvatarFallback className="text-2xl">
                       {doctorInitials}
                     </AvatarFallback>
                   )}
                 </Avatar>
+
                 <div>
                   <h1 className="text-lg font-semibold">Dr. {doctor.name}</h1>
                   <p className="text-muted-foreground text-sm">
                     {doctor.specialty}
                   </p>
+                  <EditDoctor doctor={doctor} />
                 </div>
               </div>
               <form action={logoutDoctor}>
