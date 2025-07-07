@@ -94,27 +94,29 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
       {/* Cabeçalho do paciente */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                <AvatarFallback className="text-2xl">
-                  {patientInitials}
-                </AvatarFallback>
-              </Avatar>
-              <div>
+          <div className="items-center md:flex md:justify-between">
+            <div className="items-center gap-4 md:flex">
+              <div className="mb-2 flex items-center justify-center md:mb-0 md:justify-start">
+                <Avatar className="h-20 w-20 md:h-16 md:w-16">
+                  <AvatarFallback className="bg-primary-foreground text-2xl">
+                    {patientInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              <div className="flex w-full flex-col items-center justify-center gap-1 md:items-start">
                 <CardTitle className="text-2xl">{patient.name}</CardTitle>
-                <div className="text-muted-foreground mt-2 flex items-center gap-4">
-                  <div className="flex items-center gap-1">
+                <div className="text-muted-foreground mt-2 items-center justify-center gap-4 md:flex">
+                  <div className="mb-2 flex items-center gap-1 md:mb-0">
                     <Mail className="h-4 w-4" />
                     <span className="text-sm">{patient.email}</span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="mb-2 flex items-center justify-center gap-1 md:mb-0">
                     <Phone className="h-4 w-4" />
                     <span className="text-sm">
                       {formatPhoneNumber(patient.phoneNumber)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="mb-4 flex items-center justify-center gap-1 md:mb-0">
                     <User className="h-4 w-4" />
                     <Badge variant="outline">
                       {patient.sex === "male" ? "Masculino" : "Feminino"}
@@ -124,7 +126,7 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
               </div>
             </div>
             <Dialog>
-              <DialogTrigger asChild>
+              <DialogTrigger asChild className="w-full md:w-auto">
                 <Button variant="outline">
                   <Edit className="mr-2 h-4 w-4" />
                   Editar Paciente
@@ -218,7 +220,7 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
               appointments.map((appointment) => (
                 <div
                   key={appointment.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="items-center justify-between rounded-lg border p-4 md:flex"
                 >
                   <div className="flex items-center gap-4">
                     <div className="bg-muted flex h-12 w-12 flex-col items-center justify-center rounded-lg">
@@ -236,7 +238,7 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium">
+                      <p className="text-xs font-medium md:text-base">
                         {new Date(appointment.date).toLocaleDateString(
                           "pt-BR",
                           {
@@ -258,7 +260,7 @@ export default async function PatientDetails({ params }: PatientDetailsProps) {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="mt-4 flex items-center justify-between gap-3 md:mt-0">
                     <Badge className={statusColors[appointment.status]}>
                       {appointment.status}
                     </Badge>

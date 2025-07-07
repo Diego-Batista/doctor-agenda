@@ -138,7 +138,7 @@ async function PatientsList({
         return (
           <Card
             key={patient.id}
-            className="max-w-[300px] transition-shadow hover:shadow-md"
+            className="hover:shadow-md md:transition-shadow"
           >
             <CardHeader className="pb-3">
               <div className="flex items-center gap-3">

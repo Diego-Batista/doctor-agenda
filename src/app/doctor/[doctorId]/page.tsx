@@ -183,24 +183,26 @@ export default async function DoctorDashboard({
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-center justify-end gap-3 md:flex-row">
                     <AppointmentStatusCell
                       appointmentId={appointment.id}
                       status={appointment.status as StatusType}
                     />
-                    <span className="font-medium">
-                      {formatCurrencyInCents(
-                        appointment.appointmentPriceInCents,
-                      )}
-                    </span>
-                    <AppointmentsTableActions
-                      appointment={{
-                        ...appointment,
-                        doctor, // Certifique-se de que a variável 'doctor' está disponível no escopo
-                      }}
-                      patients={[appointment.patient]}
-                      doctors={[doctor]}
-                    />
+                    <div className="flex w-full items-center justify-end">
+                      <span className="font-medium">
+                        {formatCurrencyInCents(
+                          appointment.appointmentPriceInCents,
+                        )}
+                      </span>
+                      <AppointmentsTableActions
+                        appointment={{
+                          ...appointment,
+                          doctor, // Certifique-se de que a variável 'doctor' está disponível no escopo
+                        }}
+                        patients={[appointment.patient]}
+                        doctors={[doctor]}
+                      />
+                    </div>
                   </div>
                 </div>
               ))
